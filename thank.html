@@ -73,7 +73,45 @@ transition:0.3s;
 .btn:hover{
 transform:translateY(-3px);
 }
+.credit{
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+font-size:18px;
+font-weight:bold;
+color:white;
+padding:6px 15px;
+border-radius:20px;
+background:rgba(0,0,0,0.3);
+backdrop-filter:blur(10px);
+box-shadow:0 0 15px rgba(255,0,100,0.7);
+animation:glow 2s infinite alternate;
+}
 
+.credit .heart{
+display:inline-block;
+animation:beat 0.8s infinite;
+margin:0 5px;
+}
+
+@keyframes beat{
+0%,100%{
+transform:scale(1);
+}
+50%{
+transform:scale(1.4);
+}
+}
+
+@keyframes glow{
+0%{
+box-shadow:0 0 10px rgba(255,0,100,0.6);
+}
+100%{
+box-shadow:0 0 25px rgba(255,0,100,1);
+}
+}
 </style>
 </head>
 
@@ -92,6 +130,10 @@ alt="Love GIF">
 <a href="Inbox.html" class="btn">⬅ Back</a>
 
 </div>
-
+<div class="credit">
+<span class="heart">❤️</span>
+Created by Mohamed
+<span class="heart">❤️</span>
+</div>
 </body>
 </html>
