@@ -257,8 +257,6 @@ Sending
 Created by Mohamed
 </div>
 
-<!-- LOVE LOADING OVERLAY -->
-
 <div id="loveLoadingOverlay">
 
 <div class="love-heart"></div>
@@ -287,6 +285,8 @@ textarea.style.height=textarea.scrollHeight+'px';
 function sendMail(){
 
 let message=document.getElementById("message").value;
+// Halkan waxaan ka soo qaadeynaa magaca lagu keydiyay bogga hore
+let senderName = sessionStorage.getItem('senderName') || "Qof aan la aqoon";
 
 if(message.trim()==""){
 alert("fariin quruxbadan qor");
@@ -299,8 +299,10 @@ let btn=document.getElementById("sendBtn");
 loading.style.display="block";
 btn.style.display="none";
 
+// Halkan 'from_name' wuxuu qaadayaa magaca qofka, 'message'-na waa fariinta
 emailjs.send("service_j2uu8yq","template_z1r5iah",{
-message:message
+from_name: senderName,
+message: message
 })
 
 .then(function(){
