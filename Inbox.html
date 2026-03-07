@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>wait...</title>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<style>
+
+:root{
+--glass-bg:rgba(255,255,255,0.2);
+--glass-border:rgba(255,255,255,0.4);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ff4da6,#ff0066,#b30047);
+overflow:hidden;
+}
+
+.glass-chat-container{
+width:90%;
+max-width:450px;
+background:var(--glass-bg);
+backdrop-filter:blur(20px);
+border:1px solid var(--glass-border);
+border-radius:25px;
+padding:20px;
+box-shadow:0 15px 35px rgba(0,0,0,0.2);
+z-index:10;
+}
+
+.input-area{
+width:100%;
+background:transparent;
+border:none;
+outline:none;
+color:white;
+font-size:18px;
+resize:none;
+min-height:45px;
+max-height:300px;
+overflow:hidden;
+margin-bottom:10px;
+}
+
+.input-area::placeholder{
+color:rgba(255,255,255,0.8);
+}
+
+.divider{
+height:1px;
+background:rgba(255,255,255,0.2);
+margin-bottom:10px;
+}
+
+.footer{
+display:flex;
+justify-content:flex-end;
+align-items:center;
+gap:10px;
+}
+
+.send-btn{
+display:flex;
+align-items:center;
+gap:8px;
+background:rgba(255,255,255,0.25);
+color:white;
+padding:10px 22px;
+border-radius:15px;
+cursor:pointer;
+border:1px solid rgba(255,255,255,0.4);
+backdrop-filter:blur(5px);
+transition:0.3s;
+}
+
+.send-btn:hover{
+transform:translateY(-3px);
+background:rgba(255,255,255,0.4);
+}
+
+.loading-text{
+display:none;
+color:white;
+font-size:14px;
+}
+
+.loading-dots span{
+animation:blink 1.4s infinite;
+}
+
+.loading-dots span:nth-child(2){
+animation-delay:0.2s;
+}
+
+.loading-dots span:nth-child(3){
+animation-delay:0.4s;
+}
+
+@keyframes blink{
+0%{opacity:0}
+50%{opacity:1}
+100%{opacity:0}
+}
+
+/* floating hearts */
+
+.heart{
+position:fixed;
+bottom:-50px;
+pointer-events:none;
+animation:floatUp linear forwards;
+z-index:1;
+}
+
+@keyframes floatUp{
+0%{transform:translateY(0) rotate(0deg);opacity:0.8;}
+100%{transform:translateY(-110vh) rotate(360deg);opacity:0;}
+}
+
+.credit{
+position:fixed;
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+color:white;
+font-size:14px;
+opacity:0.8;
+}
+
+/* LOVE LOADING OVERLAY */
+
+#loveLoadingOverlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:linear-gradient(135deg,#ff4e8a,#ff1e56);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+}
+
+/* Heart */
+
+.love-heart{
+width:80px;
+height:80px;
+background:red;
+position:relative;
+transform:rotate(-45deg);
+animation:beat 1s infinite;
+}
+
+.love-heart::before,
+.love-heart::after{
+content:"";
+width:80px;
+height:80px;
+background:red;
+border-radius:50%;
+position:absolute;
+}
+
+.love-heart::before{
+top:-40px;
+left:0;
+}
+
+.love-heart::after{
+left:40px;
+top:0;
+}
+
+@keyframes beat{
+0%,100%{ transform:rotate(-45deg) scale(1); }
+50%{ transform:rotate(-45deg) scale(1.2); }
+}
+
+/* Loading bar */
+
+.bar{
+width:300px;
+height:12px;
+background:rgba(255,255,255,0.3);
+border-radius:20px;
+margin-top:20px;
+overflow:hidden;
+}
+
+.bar span{
+display:block;
+height:100%;
+width:0%;
+background:white;
+animation:load 3s forwards;
+}
+
+@keyframes load{
+0%{width:0%;}
+100%{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="glass-chat-container">
+
+<textarea
+id="message"
+class="input-area"
+placeholder="Farriintaada halkan ku qor..."
+oninput="autoExpand(this)"
+></textarea>
+
+<div class="divider"></div>
+
+<div class="footer">
+
+<div class="loading-text" id="loadingText">
+Sending
+<span class="loading-dots">
+<span>.</span>
+<span>.</span>
+<span>.</span>
+</span>
+</div>
+
+<div class="send-btn" id="sendBtn" onclick="sendMail()">
+📨 Send
+</div>
+
+</div>
+
+</div>
+
+<div class="credit">
+Created by Mohamed
+</div>
+
+<!-- LOVE LOADING OVERLAY -->
+
+<div id="loveLoadingOverlay">
+
+<div class="love-heart"></div>
+
+<h1 style="margin-top:40px;letter-spacing:2px;color:white;">
+Loading Love...
+</h1>
+
+<div class="bar">
+<span></span>
+</div>
+
+</div>
+
+<script>
+
+(function(){
+emailjs.init("9TO7hHMapqy4U9kNz");
+})();
+
+function autoExpand(textarea){
+textarea.style.height='auto';
+textarea.style.height=textarea.scrollHeight+'px';
+}
+
+function sendMail(){
+
+let message=document.getElementById("message").value;
+
+if(message.trim()==""){
+alert("fariin quruxbadan qor");
+return;
+}
+
+let loading=document.getElementById("loadingText");
+let btn=document.getElementById("sendBtn");
+
+loading.style.display="block";
+btn.style.display="none";
+
+emailjs.send("service_j2uu8yq","template_z1r5iah",{
+message:message
+})
+
+.then(function(){
+
+loading.style.display="none";
+document.getElementById("message").value="";
+
+/* SHOW OVERLAY */
+
+document.getElementById("loveLoadingOverlay").style.display="flex";
+
+/* 3 seconds kadib page kale */
+
+setTimeout(()=>{
+window.location.href="thank.html";
+},3000);
+
+})
+
+.catch(function(error){
+
+loading.style.display="none";
+btn.style.display="flex";
+
+alert("Error: "+JSON.stringify(error));
+
+});
+
+}
+
+/* floating hearts */
+
+function createHeart(){
+
+const heart=document.createElement("div");
+heart.classList.add("heart");
+
+const emojis=["❤️","💖","💕","💗","🌸","✨"];
+
+heart.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=Math.random()*3+4+"s";
+heart.style.fontSize=Math.random()*20+15+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+}
+
+setInterval(createHeart,500);
+
+</script>
+
+</body>
+</html>
