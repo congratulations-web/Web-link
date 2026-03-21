@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <title>EmailJS Test</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // Halkan geli Public Key-gaaga
+            emailjs.init("wm5gF1fpGmTpyCjqP");
+        })();
+    </script>
+</head>
+<body>
+
+    <h2>Tijaabi Email-kaaga</h2>
+    <button onclick="sendTestEmail()">Dir Email Tijaabo ah</button>
+
+    <p id="status"></p>
+
+    <script>
+        function sendTestEmail() {
+            const statusText = document.getElementById("status");
+            statusText.innerText = "Waa la dirayaa...";
+
+            // Xogta loo dirayo Template-kaaga
+            const params = {
+                from_name: "Maxamed Test",
+                message: "Hambalyo! EmailJS-kaagu si sax ah ayuu u shaqaynayaa.",
+                reply_to: "maxamedaxamed153@gmail.com"
+            };
+
+            emailjs.send("service_3c4c8eg", "template_pwp7ntq", params)
+                .then(function(response) {
+                    statusText.innerText = "Email-ku si guul leh ayuu u baxay! (Status: " + response.status + ")";
+                    statusText.style.color = "green";
+                }, function(error) {
+                    statusText.innerText = "Wuu fashilmay: " + JSON.stringify(error);
+                    statusText.style.color = "red";
+                });
+        }
+    </script>
+
+</body>
+</html>
+
