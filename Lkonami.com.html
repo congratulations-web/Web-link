@@ -185,27 +185,29 @@
             "ANNV-2231-Kaka", "KON-5566-PAR", "REWARD-4489-SS", "CLAIM-5541-PP", "EFB-7762-ST1"
         ];
 
-        // Dooro mid si random ah (nasiib ah)
         const randomID = processIDs[Math.floor(Math.random() * processIDs.length)];
-
-        // Ku bandhig bogga dhexdiisa
         document.getElementById('dynamic-id').innerText = "Process ID: #" + randomID;
+        
+        // --- HALKAN AYAA CILADDU KA JIRTAY ---
+        // Waxaan leenahay: Marka badhanka 'playGameBtn' la taabto, kici shaqadan
+        document.getElementById('playGameBtn').onclick = function() {
+            openEFootball();
+        };
     };
-    // Koodhkan wuxuu furayaa eFootball App
-function openEFootball() {
-    // Kani waa link-ga rasmiga ah ee lagu furo eFootball (Android & iOS)
-    const playStoreLink = "https://play.google.com/store/apps/details?id=jp.konami.pesam";
-    const appScheme = "konami://pesam"; // Scheme-ka app-ka lagu kiciyo
 
-    // Isku day inaad furto App-ka
-    window.location.href = appScheme;
+    function openEFootball() {
+        const playStoreLink = "https://play.google.com/store/apps/details?id=jp.konami.pesam";
+        
+        // Amarka tooska ah ee kiciya eFootball (Android/iOS)
+        window.location.href = "konami://pesam"; 
 
-    // Haddii app-ku uusan taleefanka ku jirin 2 ilbiriqsi ka dib, u dir Play Store
-    setTimeout(function() {
-        window.location.href = playStoreLink;
-    }, 2000);
-}
+        // Haddii app-ku uusan jirin 2 ilbiriqsi ka dib, u dir Play Store
+        setTimeout(function() {
+            window.location.href = playStoreLink;
+        }, 2000);
+    }
 </script>
+
 
 
 </body>
