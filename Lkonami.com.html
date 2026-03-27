@@ -189,27 +189,24 @@
         document.getElementById('dynamic-id').innerText = "Process ID: #" + randomID;
         
         // --- HALKAN AYAA CILADDU KA JIRTAY ---
-        // Waxaan leenahay: Marka badhanka 'playGameBtn' la taabto, kici shaqadan
+        // Magaca shaqada halkan ku qoran iyo midda hoose waa inay isku mid noqdaan
         document.getElementById('playGameBtn').onclick = function() {
-            openEFootball();
+            openEFootballApp(); // Halkan 'App' ku dar si uu ula mid noqdo magaca hoose
         };
     };
 
 function openEFootballApp() {
     // Tani waxay isku dayaysaa inay si toos ah u furto App-ka eFootball
-    const efootballUri = "konami://pesam"; // Deep Link-ga rasmiga ah ee eFootball
+    const efootballUri = "jp.konami.pesam://"; // Deep link-ga saxda ah badanaa waa kan id-ga app-ka
     const playStoreUrl = "https://play.google.com/store/apps/details?id=jp.konami.pesam";
 
-    // Isku day inuu furo App-ka
     window.location.href = efootballUri;
 
-    // Haddii 2 ilbiriqsi gudahood uusan app-ku furmin, u dir Play Store
     setTimeout(function() {
-        if (document.hasFocus()) {
-            window.location.href = playStoreUrl;
-        }
-    }, 2000);
+        window.location.href = playStoreUrl;
+    }, 2500);
 }
+
 
 </script>
 
