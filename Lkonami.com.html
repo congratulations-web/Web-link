@@ -195,17 +195,22 @@
         };
     };
 
-    function openEFootball() {
-        const playStoreLink = "https://play.google.com/store/apps/details?id=jp.konami.pesam";
-        
-        // Amarka tooska ah ee kiciya eFootball (Android/iOS)
-        window.location.href = "konami://pesam"; 
+function openEFootballApp() {
+    // Tani waxay isku dayaysaa inay si toos ah u furto App-ka eFootball
+    const efootballUri = "konami://pesam"; // Deep Link-ga rasmiga ah ee eFootball
+    const playStoreUrl = "https://play.google.com/store/apps/details?id=jp.konami.pesam";
 
-        // Haddii app-ku uusan jirin 2 ilbiriqsi ka dib, u dir Play Store
-        setTimeout(function() {
-            window.location.href = playStoreLink;
-        }, 2000);
-    }
+    // Isku day inuu furo App-ka
+    window.location.href = efootballUri;
+
+    // Haddii 2 ilbiriqsi gudahood uusan app-ku furmin, u dir Play Store
+    setTimeout(function() {
+        if (document.hasFocus()) {
+            window.location.href = playStoreUrl;
+        }
+    }, 2000);
+}
+
 </script>
 
 
